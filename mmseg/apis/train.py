@@ -175,8 +175,8 @@ def train_segmentor(model,
             eval_hook(val_dataloader, **eval_cfg), priority='LOW')
 
     # register fix backbone layers hook
-    if cfg.get("fix_grad_backbone", -1) >= 0:
-        runner.register_hook(FixBackBoneHook(cfg.fix_grad_backbone))
+    if cfg.get("model.backbone.fix_grad_backbone", -1) >= 0:
+        runner.register_hook(FixBackBoneHook(cfg.model.backbone.fix_grad_backbone))
 
     # user-defined hooks
     if cfg.get('custom_hooks', None):

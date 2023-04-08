@@ -1,10 +1,10 @@
 _base_ = [
     '../_base_/models/upernet_vit-b16_ln.py',
-    '../_base_/datasets/coco-stuff164k.py', 
+    '../_base_/datasets/ade20k_640x640.py', 
     '../_base_/default_runtime.py',
     '../_base_/schedules/schedule_160k.py'
 ]
-crop_size = (512, 512)
+crop_size = (640, 640)
 
 model = dict(
     backbone=dict(
@@ -22,12 +22,12 @@ model = dict(
     ),
     decode_head=dict(
         in_channels=[768, 768, 768, 768],
-        num_classes=171,
+        num_classes=150,
         channels=768,
     ),
     auxiliary_head=dict(
         in_channels=768,
-        num_classes=171
+        num_classes=150
     )
 )
 
@@ -81,12 +81,12 @@ log_config = dict(
             init_kwargs={
                 'entity': "landskape",
                 'project': "mae_mtl",
-                'name': "dino_fixB_layers11_lr_1e-4_b16_512x512_coco",
+                'name': "dino_fixB_layers-1_lr_1e-4_b16_640x640_ade20k",
                 'config': dict(
                     model='dino_vit_base_patch16_224',
-                    dataset='coco',
-                    img_size=(512, 512),
-                    fix_layers=10,
+                    dataset='ade20k',
+                    img_size=(640, 640),
+                    num_fix_layers=0,
                     lr=1e-4,
                     input_resolution=None
                 )
@@ -94,3 +94,8 @@ log_config = dict(
         ),
     ]
 )
+
+# runtime settings
+runner = dict(type='IterBasedRunner', max_iters=160000)
+checkpoint_config = dict(by_epoch=False, interval=16000)
+evaluation = dict(interval=16000, metric='mIoU', pre_eval=True)

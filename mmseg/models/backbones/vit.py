@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import re
 import math
 import warnings
 
@@ -197,6 +198,7 @@ class VisionTransformer(BaseModule):
                  norm_eval=False,
                  with_cp=False,
                  pretrained=None,
+                 fix_grad_backbone=None,
                  init_cfg=None):
         super(VisionTransformer, self).__init__(init_cfg=init_cfg)
 
@@ -285,10 +287,22 @@ class VisionTransformer(BaseModule):
             self.norm1_name, norm1 = build_norm_layer(
                 norm_cfg, embed_dims, postfix=1)
             self.add_module(self.norm1_name, norm1)
+    
+        if fix_grad_backbone is not None and fix_grad_backbone >= 0:
+            self.freeze_grad_backbone(fix_grad_backbone)
 
     @property
     def norm1(self):
         return getattr(self, self.norm1_name)
+
+    def freeze_grad_backbone(self, fix_grad_backbone):
+        print(f"fix to (include) layer {fix_grad_backbone}")
+        for name, param in self.named_parameters():
+            if "layers" in name:
+                group = re.search(r"layers\.([0-9]+)\.", name)
+                layer = int(group[1])
+                if layer <= fix_grad_backbone:
+                    param.requires_grad = False
 
     def init_weights(self):
         if (isinstance(self.init_cfg, dict)

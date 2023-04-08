@@ -1,10 +1,10 @@
 lr=1e-4
-fix_layer=10
-config_file=/data/jaygala/mae_mtl_exps/mmsegmentation/configs/vit/upernet_vit-b16_ln_512x512_160k_coco-stuff164k.py
+fix_layer=-1
+config_file=/data/jaygala/mae_mtl_exps/mmsegmentation/configs/vit/upernet_vit-b16_ln_640x640_160k_ade20k.py
 pretrain=/data/jaygala/mae_mtl_exps/pretrain/dino_vit_base_patch16_224.pth
-data_root=/data/jaygala/mae_mtl_exps/coco
+data_root=/data/jaygala/mae_mtl_exps/ADEChallengeData2016
 work_dir=/data/jaygala/mae_mtl_exps/exps
-exp_dir=dino_fixB_layer${fix_layer}_lr${lr}_b16_512x512_coco
+exp_dir=dino_fixB_layer${fix_layer}_lr${lr}_b16_640x640_ade20k
 
 
 GPUS=1 GPUS_PER_NODE=1 CPUS_PER_TASK=32 bash tools/slurm_train.sh \
