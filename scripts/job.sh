@@ -17,6 +17,14 @@
 #     kill -- -$$
 # }
 
+module load anaconda/3
+
+conda activate /home/mila/d/diganta.misra/.conda/envs/mae
+
+wandb login bd67cef57b7227730fe3edf96e11d954558a9d0d
+
+ulimit -Sn $(ulimit -Hn)
+
 lr=1e-4
 fix_layer=12
 config_file=/home/mila/d/diganta.misra/projects/mae_mtl/configs/vit/upernet_vit-b16_ln_640x640_160k_ade20k.py
