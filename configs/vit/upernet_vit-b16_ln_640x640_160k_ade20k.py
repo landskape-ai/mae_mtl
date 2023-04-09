@@ -81,12 +81,12 @@ log_config = dict(
             init_kwargs={
                 'entity': "landskape",
                 'project': "mae_mtl",
-                'name': "dino_fixB_layers-1_lr_1e-4_b16_640x640_ade20k",
+                'name': "dino_fixB_layers6_lr_1e-4_b16_640x640_ade20k",
                 'config': dict(
                     model='dino_vit_base_patch16_224',
                     dataset='ade20k',
                     img_size=(640, 640),
-                    num_fix_layers=0,
+                    num_fix_layers=7,
                     lr=1e-4,
                     input_resolution=None
                 )
