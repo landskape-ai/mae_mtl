@@ -15,7 +15,6 @@ model = dict(
         num_layers=12,
         num_heads=12,
         mlp_ratio=4,
-        qkv_bias=True,
         out_indices=[3, 5, 7, 11],
         drop_path_rate=0.1,
         final_norm=True
