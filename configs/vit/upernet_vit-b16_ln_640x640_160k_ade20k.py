@@ -8,14 +8,13 @@ crop_size = (640, 640)
 
 model = dict(
     backbone=dict(
-        type='VisionTransformer',
+        type='MAE',
         img_size=crop_size,
         patch_size=16,
         embed_dims=768,
         num_layers=12,
         num_heads=12,
         mlp_ratio=4,
-        qkv_bias=True,
         out_indices=[3, 5, 7, 11],
         drop_path_rate=0.1,
         final_norm=True
@@ -83,7 +82,7 @@ log_config = dict(
                 'project': "mae_mtl",
                 'name': "dino_fixB_layers-1_lr_1e-4_b16_640x640_ade20k",
                 'config': dict(
-                    model='dino_vit_base_patch16_224',
+                    model='mae_vit_base_patch16_224',
                     dataset='ade20k',
                     img_size=(640, 640),
                     num_fix_layers=0,
