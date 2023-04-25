@@ -1,10 +1,10 @@
 _base_ = [
     '../_base_/models/upernet_vit-b16_ln.py',
-    '../_base_/datasets/ade20k_640x640.py', 
+    '../_base_/datasets/pascal_context.py', 
     '../_base_/default_runtime.py',
     '../_base_/schedules/schedule_160k.py'
 ]
-crop_size = (640, 640)
+crop_size = (480, 480)
 
 model = dict(
     backbone=dict(
@@ -27,7 +27,7 @@ model = dict(
     ),
     auxiliary_head=dict(
         in_channels=768,
-        num_classes=150
+        num_classes=60
     )
 )
 
@@ -71,6 +71,7 @@ lr_config = dict(
 
 # By default, models are trained on 8 GPUs with 2 images per GPU
 data = dict(samples_per_gpu=2)
+optimizer_config = dict(type='GradientCumulativeOptimizerHook', cumulative_iters=8)
 
 # Wandb logging
 log_config = dict(
@@ -81,14 +82,14 @@ log_config = dict(
             init_kwargs={
                 'entity': "landskape",
                 'project': "mae_mtl",
-                'name': "dino_fixB_layers-1_lr_1e-4_b16_640x640_ade20k",
+                'name': "deit_fixB_layers10_lr_1e-4_b16_480x480_pascal_context",
                 'config': dict(
-                    model='dino_vit_base_patch16_224',
-                    dataset='ade20k',
-                    img_size=(640, 640),
-                    num_fix_layers=0,
+                    model='deit_base_patch16_384',
+                    dataset='pascal_context',
+                    img_size=(480, 480),
+                    num_fix_layers=11,
                     lr=1e-4,
-                    input_resolution=None
+                    input_resolution=(384, 384)
                 )
             }
         ),
@@ -96,6 +97,6 @@ log_config = dict(
 )
 
 # runtime settings
-runner = dict(type='IterBasedRunner', max_iters=160000)
-checkpoint_config = dict(by_epoch=False, interval=16000)
-evaluation = dict(interval=16000, metric='mIoU', pre_eval=True)
+runner = dict(type='IterBasedRunner', max_iters=40000)
+checkpoint_config = dict(by_epoch=False, interval=4000)
+evaluation = dict(interval=4000, metric='mIoU', pre_eval=True)
