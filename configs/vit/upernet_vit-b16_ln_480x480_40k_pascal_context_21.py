@@ -74,27 +74,27 @@ data = dict(samples_per_gpu=2)
 optimizer_config = dict(type='GradientCumulativeOptimizerHook', cumulative_iters=8)
 
 # Wandb logging
-# log_config = dict(
-#     interval=50,
-#     hooks=[
-#         dict(type='TextLoggerHook', by_epoch=False),
-#         dict(type='MMSegWandbHook', by_epoch=False,
-#             init_kwargs={
-#                 'entity': "landskape",
-#                 'project': "mae_mtl",
-#                 'name': "deit_fixB_layers10_lr_1e-4_b16_480x480_pascal_context",
-#                 'config': dict(
-#                     model='deit_base_patch16_384',
-#                     dataset='pascal_context',
-#                     img_size=(480, 480),
-#                     num_fix_layers=11,
-#                     lr=1e-4,
-#                     input_resolution=(384, 384)
-#                 )
-#             }
-#         ),
-#     ]
-# )
+log_config = dict(
+    interval=50,
+    hooks=[
+        dict(type='TextLoggerHook', by_epoch=False),
+        dict(type='MMSegWandbHook', by_epoch=False,
+            init_kwargs={
+                'entity': "landskape",
+                'project': "mae_mtl",
+                'name': "deit_fixB_layers-1_lr_1e-4_b16_480x480_pascal_context",
+                'config': dict(
+                    model='deit_base_patch16_384',
+                    dataset='pascal_context',
+                    img_size=(480, 480),
+                    num_fix_layers=0,
+                    lr=1e-4,
+                    input_resolution=(384, 384)
+                )
+            }
+        ),
+    ]
+)
 
 # runtime settings
 runner = dict(type='IterBasedRunner', max_iters=40000)
