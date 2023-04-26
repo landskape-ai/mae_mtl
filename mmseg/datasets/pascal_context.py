@@ -101,3 +101,36 @@ class PascalContextDataset59(CustomDataset):
             reduce_zero_label=True,
             **kwargs)
         assert self.file_client.exists(self.img_dir) and self.split is not None
+
+@DATASETS.register_module()
+class PascalContextDataset21(CustomDataset):
+    """PascalContext dataset.
+
+    In segmentation map annotation for PascalContext21, 0 stands for background,
+    which is included in 20 categories. ``reduce_zero_label`` is fixed to
+    False. The ``img_suffix`` is fixed to '.jpg' and ``seg_map_suffix`` is
+    fixed to '.png'.
+
+    Args:
+        split (str): Split txt file for PascalContext.
+    """
+
+    CLASSES = ('background', 'aeroplane', 'bicycle', 'bird', 'boat', 'bottle', 
+               'bus', 'car', 'cat', 'chair', 'cow', 'dog', 'horse', 
+               'motorbike', 'person', 'pottedplant', 'sheep', 'sofa', 
+               'train', 'tvmonitor')
+
+    PALETTE = [[120, 120, 120], [180, 120, 120], [140, 140, 140], [204, 5, 255], 
+               [230, 230, 230], [224, 5, 255], [150, 5, 61], [8, 255, 51], 
+               [255, 6, 82], [204, 255, 4], [0, 102, 200], [11, 102, 255], 
+               [7, 255, 224], [255, 41, 10], [102, 8, 255], [255, 122, 8], 
+               [255, 5, 153], [250, 10, 15], [255, 31, 0], [0, 0, 255]]
+
+    def __init__(self, split, **kwargs):
+        super(PascalContextDataset21, self).__init__(
+            img_suffix='.jpg',
+            seg_map_suffix='.png',
+            split=split,
+            reduce_zero_label=True,
+            **kwargs)
+        assert self.file_client.exists(self.img_dir) and self.split is not None
