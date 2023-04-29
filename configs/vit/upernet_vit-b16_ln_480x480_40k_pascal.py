@@ -8,14 +8,14 @@ crop_size = (480, 480)
 
 model = dict(
     backbone=dict(
-        type='VisionTransformer',
+        type='MAE',
         img_size=crop_size,
         patch_size=16,
         embed_dims=768,
         num_layers=12,
         num_heads=12,
         mlp_ratio=4,
-        qkv_bias=True,
+        # qkv_bias=True,
         out_indices=[3, 5, 7, 11],
         drop_path_rate=0.1,
         final_norm=True
@@ -28,7 +28,8 @@ model = dict(
     auxiliary_head=dict(
         in_channels=768,
         num_classes=21
-    )
+    ),
+    test_cfg=dict(mode='slide', crop_size=crop_size, stride=(384, 384))
 )
 
 # AdamW optimizer, no weight decay for position embedding & layer norm
@@ -82,12 +83,12 @@ log_config = dict(
             init_kwargs={
                 'entity': "landskape",
                 'project': "mae_mtl",
-                'name': "deit_fixB_layers-1_lr_1e-4_b16_480x480_pascal_context",
+                'name': "mae_384_100ep_fixB_layers5_lr_1e-4_b16_480x480_pascal_context",
                 'config': dict(
-                    model='deit_base_patch16_384',
+                    model='mae_384_100ep',
                     dataset='pascal_context',
                     img_size=(480, 480),
-                    num_fix_layers=0,
+                    num_fix_layers=6,
                     lr=1e-4,
                     input_resolution=(384, 384)
                 )

@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.import math
+import re
 import math
 
 import torch
@@ -99,6 +100,7 @@ class MAE(BEiT):
                  norm_eval=False,
                  pretrained=None,
                  init_values=0.1,
+                 fix_grad_backbone=None,
                  init_cfg=None):
         super(MAE, self).__init__(
             img_size=img_size,
@@ -127,6 +129,19 @@ class MAE(BEiT):
         self.num_patches = self.patch_shape[0] * self.patch_shape[1]
         self.pos_embed = nn.Parameter(
             torch.zeros(1, self.num_patches + 1, embed_dims))
+        
+        if fix_grad_backbone is not None and fix_grad_backbone >= 0:
+            self.freeze_grad_backbone(fix_grad_backbone)
+    
+    
+    def freeze_grad_backbone(self, fix_grad_backbone):
+        print(f"fix to (include) layer {fix_grad_backbone}")
+        for name, param in self.named_parameters():
+            if "layers" in name:
+                group = re.search(r"layers\.([0-9]+)\.", name)
+                layer = int(group[1])
+                if layer <= fix_grad_backbone:
+                    param.requires_grad = False
 
     def _build_layers(self):
         dpr = [
