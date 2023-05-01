@@ -1,6 +1,6 @@
 _base_ = [
     '../_base_/models/upernet_vit-b16_ln.py',
-    '../_base_/datasets/pascal_context_21.py', 
+    '../_base_/datasets/pascal_context.py', 
     '../_base_/default_runtime.py',
     '../_base_/schedules/schedule_160k.py'
 ]
@@ -8,26 +8,26 @@ crop_size = (480, 480)
 
 model = dict(
     backbone=dict(
-        type='MAE',
+        type='VisionTransformer',
         img_size=crop_size,
         patch_size=16,
         embed_dims=768,
         num_layers=12,
         num_heads=12,
         mlp_ratio=4,
-        # qkv_bias=True,
+        qkv_bias=True,
         out_indices=[3, 5, 7, 11],
         drop_path_rate=0.1,
         final_norm=True
     ),
     decode_head=dict(
         in_channels=[768, 768, 768, 768],
-        num_classes=150,
         channels=768,
+        num_classes=60,
     ),
     auxiliary_head=dict(
         in_channels=768,
-        num_classes=21
+        num_classes=60
     ),
     test_cfg=dict(mode='slide', crop_size=crop_size, stride=(384, 384))
 )
@@ -83,9 +83,9 @@ log_config = dict(
             init_kwargs={
                 'entity': "landskape",
                 'project': "mae_mtl",
-                'name': "mae_384_100ep_fixB_layers5_lr_1e-4_b16_480x480_pascal_context",
+                'name': "deit_384_fixB_layers5_pascal",
                 'config': dict(
-                    model='mae_384_100ep',
+                    model='deit_384',
                     dataset='pascal_context',
                     img_size=(480, 480),
                     num_fix_layers=6,

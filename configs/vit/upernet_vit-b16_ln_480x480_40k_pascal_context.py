@@ -22,7 +22,7 @@ model = dict(
     ),
     decode_head=dict(
         in_channels=[768, 768, 768, 768],
-        num_classes=150,
+        num_classes=60,
         channels=768,
     ),
     auxiliary_head=dict(
